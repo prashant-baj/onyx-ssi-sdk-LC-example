@@ -59,7 +59,8 @@ export async function verifyPresentationJWT(
     // eslint-disable-next-line  @typescript-eslint/no-explicit-any
 ) : Promise<boolean> {
     if(typeof vp === 'string') {
-        const verified = await verifyPresentation(vp, didResolver, options)
+        const verified = await verifyPresentation(vp, didResolver, options);
+        console.log(verified.payload);
         return verified.verified
     }
     throw TypeError('Ony JWT supported for Verifiable Presentations')

@@ -131,6 +131,31 @@ export class EthrDIDMethod implements DIDMethod {
         return Promise.resolve(true);
     }
 
+
+    async setAttribute(did: DIDWithKeys, attributeName: string, attributeValue: string): Promise<any> {
+       
+        
+        const wallet = new Wallet(did.keyPair.privateKey as string, this.web3Provider);
+        const address = await wallet.connect(this.web3Provider).getAddress()
+        const contractAddress = this.providerConfigs.registry
+        const registry= new Contract(contractAddress, EthereumDIDRegistry.abi, wallet)
+        const tx = await registry.setAttribute(
+            address,
+            ethers.utils.formatBytes32String(attributeName),
+            ethers.utils.formatBytes32String(attributeValue),
+            10000000000000,
+        )
+
+        return tx.wait();
+        // if(!receipt || !receipt.status) {
+        //     throw new DIDMethodFailureError('Error updating')
+        // }
+        //return Promise.resolve(true);
+    }
+
+
+    
+
     /**
      * Deactivates a DID on the Ethr DIDRegistry
      * 

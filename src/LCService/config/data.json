@@ -1,0 +1,15 @@
+{
+    "lcNumber": "0a9s8dy0uas",
+    "lcType": "Irrevocable",
+    "lcApplicant": "United Imports Corporation",
+    "lcAmount": "100",
+    "currency": "USD",
+    "beneficiary": "Acme Exports Corporation",
+    "issuingBank": "JPMorgan London Branch",
+    "issuanceDate": "2023-11-12",
+    "expirationDate": "2023-11-11",
+    "terms": [
+        "Goods must be delivered",
+        "LC must be verified digitally"
+    ]
+  }
