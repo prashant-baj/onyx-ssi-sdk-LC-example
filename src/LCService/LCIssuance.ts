@@ -60,7 +60,7 @@ async function generateVC() {
 
     const didEthr = new EthrDIDMethod(ethrProviders.lcIssuerEthrProvider);
     //const didKey = new KeyDIDMethod()
-    const didResolver = getSupportedResolvers([didEthr, didEthr]);
+    const didResolver = getSupportedResolvers([didEthr]);
 
     didResolver.resolve(applicantDid.did, { accept: 'application/did+json' }).then(data => {
       console.log("Applicants DID resolved !! ");
@@ -95,9 +95,15 @@ async function generateVC() {
       console.error("Applicants DID could not be resolved");
     });
 
-    const tx = didEthr.setAttribute(lcIssuerDid,"name","Prashant").then(res => {
-      console.log(res);
-    });
+    // const tx = didEthr.setAttribute(lcIssuerDid,"name","Prashant").then(res => {
+    //   console.log(res);      
+    // });
+
+    // const tx = didEthr.revokeAttribute(applicantDid,"name","Prashant").then(res => {
+    //   console.log(res);
+    // });
+
+    
 
   } else {
     console.error('LC data is invalid. Please check the errors:');

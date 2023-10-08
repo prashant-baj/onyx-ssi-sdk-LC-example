@@ -22,7 +22,18 @@ import {
     KeyPair,
     KEY_ALG
 } from "../";
-import { VerifiableCredential, VerifiablePresentation, verifyCredential, VerifyCredentialOptions, verifyPresentation, VerifyPresentationOptions } from "did-jwt-vc"
+
+import { 
+    VerifiableCredential, 
+    VerifiablePresentation, 
+    verifyCredential, 
+    VerifyCredentialOptions, 
+    verifyPresentation, 
+    VerifyPresentationOptions,
+    VerifiedPresentation,
+    verifyPresentationPayloadOptions,
+    JwtPresentationPayload        
+ } from "did-jwt-vc"
 import { Resolvable } from 'did-resolver';
 
 
@@ -45,7 +56,7 @@ export async function verifyLCPresentation() {
         const didEthr = new EthrDIDMethod(ethrProviders.advisingBankEthrProvider);
         const didResolver = getSupportedResolvers([didEthr]);
 
-        const resultVp = await verifyLCPresentationJWT(jwtVP, didResolver)
+        const resultVp = await verifyLCPresentationLocal(jwtVP, didResolver)
         console.log(resultVp)
 
     } catch (error) {
@@ -68,5 +79,26 @@ export async function verifyLCPresentationJWT(
     throw TypeError('Ony JWT supported for Verifiable Presentations')
 
 }
+
+export async function verifyLCPresentationLocal(
+    presentation: JWT,
+    resolver: Resolvable,
+    options: VerifyPresentationOptions = {}
+  ): Promise<VerifiedPresentation> {
+    const nbf = options?.policies?.issuanceDate === false ? false : undefined
+    const exp = options?.policies?.expirationDate === false ? false : undefined
+    options = { audience: options.domain, ...options, policies: { ...options?.policies, nbf, exp, iat: nbf } }
+    const verified: Partial<VerifiedPresentation> = await verifyJWT(presentation, {
+      resolver,
+      ...options,
+    })
+    verifyPresentationPayloadOptions(verified.payload as JwtPresentationPayload, options)
+    // verified.verifiablePresentation = normalizePresentation(verified.jwt as string, options?.removeOriginalFields)
+    // if (options?.policies?.format !== false) {
+    //   validatePresentationPayload(verified.verifiablePresentation)
+    // }
+    return verified as VerifiedPresentation
+  }
+  
 
 verifyLCPresentation();

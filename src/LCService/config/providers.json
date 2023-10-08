@@ -2,21 +2,25 @@
     "lcIssuerEthrProvider": {
         "name": "quorum",
         "rpcUrl": "http://4.224.149.189/upi-issuer",
-        "registry": "0x37c544B45f9538D255fe7a5Db6E787D3763aC8aE"
+        "tesseraUrl": "http://4.224.149.189/tessera-3",
+        "registry": "0xfAA65222f6F64E0a018B86394aF66D70aDb7C1e3"
     },
     "advisingBankEthrProvider": {
         "name": "quorum",
         "rpcUrl": "http://4.224.149.189/acquirer",
-        "registry": "0x37c544B45f9538D255fe7a5Db6E787D3763aC8aE"
+        "tesseraUrl": "http://4.224.149.189/tessera-5",
+        "registry": "0xfAA65222f6F64E0a018B86394aF66D70aDb7C1e3"
     },
     "beneficiaryEthrProvider": {
         "name": "quorum",
         "rpcUrl": "http://4.224.149.189/merchant",
-        "registry": "0x37c544B45f9538D255fe7a5Db6E787D3763aC8aE"
+        "tesseraUrl": "http://4.224.149.189/tessera-4",
+        "registry": "0xfAA65222f6F64E0a018B86394aF66D70aDb7C1e3"
     },
     "applicantEthrProvider": {
         "name": "quorum",
         "rpcUrl": "http://4.224.149.189/manufacturer",
-        "registry": "0x37c544B45f9538D255fe7a5Db6E787D3763aC8aE"
+        "tesseraUrl": "http://4.224.149.189/tessera-2",
+        "registry": "0xfAA65222f6F64E0a018B86394aF66D70aDb7C1e3"
     }
 }

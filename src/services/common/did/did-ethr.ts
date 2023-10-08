@@ -8,6 +8,8 @@ import { DID, DIDMethod, DIDWithKeys } from "./did";
 import { KeyUtils, KEY_ALG } from "../../../utils";
 import { DIDMethodFailureError } from "../../../errors";
 import { EthereumDIDRegistry, getResolver } from "ethr-did-resolver";
+import { PrivateJsonRpcProvider, PrivateWallet, PrivateContractFactory } from 'ethers-quorum';
+
 
 export class EthrDIDMethod implements DIDMethod {
     name = 'ethr';
@@ -132,9 +134,8 @@ export class EthrDIDMethod implements DIDMethod {
     }
 
 
-    async setAttribute(did: DIDWithKeys, attributeName: string, attributeValue: string): Promise<any> {
-       
-        
+    async setAttribute(did: DIDWithKeys, attributeName: string, attributeValue: string): Promise<boolean> {
+               
         const wallet = new Wallet(did.keyPair.privateKey as string, this.web3Provider);
         const address = await wallet.connect(this.web3Provider).getAddress()
         const contractAddress = this.providerConfigs.registry
@@ -144,17 +145,89 @@ export class EthrDIDMethod implements DIDMethod {
             ethers.utils.formatBytes32String(attributeName),
             ethers.utils.formatBytes32String(attributeValue),
             10000000000000,
-        )
-
-        return tx.wait();
-        // if(!receipt || !receipt.status) {
-        //     throw new DIDMethodFailureError('Error updating')
-        // }
-        //return Promise.resolve(true);
+        );
+        const receipt = await tx.wait();
+        if(!receipt || !receipt.status) {
+            throw new DIDMethodFailureError('Error updating')
+        }else {
+            console.log(receipt);
+        }
+        return Promise.resolve(true);
+        
     }
 
 
-    
+
+      async revokeAttribute(did: DIDWithKeys, attributeName: string, attributeValue: string): Promise<boolean> {
+               
+        const wallet = new Wallet(did.keyPair.privateKey as string, this.web3Provider);
+        const address = await wallet.connect(this.web3Provider).getAddress()
+        const contractAddress = this.providerConfigs.registry
+        const registry= new Contract(contractAddress, EthereumDIDRegistry.abi, wallet)
+        const tx = await registry.revokeAttribute(
+            address,
+            ethers.utils.formatBytes32String(attributeName),
+            ethers.utils.formatBytes32String(attributeValue),            
+        );
+        const receipt = await tx.wait();
+        if(!receipt || !receipt.status) {
+            throw new DIDMethodFailureError('Error updating')
+        } else {
+            console.log(receipt);
+        }
+        return Promise.resolve(true);
+        
+    }
+
+
+    // function addDelegate(address identity, bytes32 delegateType, address delegate, uint validity) public {
+    //     addDelegate(identity, msg.sender, delegateType, delegate, validity);
+    //   }
+     
+
+      async addDelegate(did: DIDWithKeys, delegateType: string, delegateAddress: string): Promise<boolean> {
+               
+        const wallet = new Wallet(did.keyPair.privateKey as string, this.web3Provider);
+        const address = await wallet.connect(this.web3Provider).getAddress()
+        const contractAddress = this.providerConfigs.registry
+        const registry= new Contract(contractAddress, EthereumDIDRegistry.abi, wallet)
+        const tx = await registry.addDelegate(
+            address,
+            ethers.utils.formatBytes32String(delegateType),
+            delegateAddress, 
+            10000000000000           
+        );
+        const receipt = await tx.wait();
+        if(!receipt || !receipt.status) {
+            throw new DIDMethodFailureError('Error updating')
+        } else {
+            console.log(receipt);
+        }
+        return Promise.resolve(true);
+        
+    }  
+
+
+    async revokeDelegate(did: DIDWithKeys, delegateType: string, delegateAddress: string): Promise<boolean> {
+               
+        const wallet = new Wallet(did.keyPair.privateKey as string, this.web3Provider);
+        const address = await wallet.connect(this.web3Provider).getAddress()
+        const contractAddress = this.providerConfigs.registry
+        const registry= new Contract(contractAddress, EthereumDIDRegistry.abi, wallet)
+        const tx = await registry.revokeDelegate(
+            address,
+            ethers.utils.formatBytes32String(delegateType),
+            delegateAddress,                        
+        );
+        const receipt = await tx.wait();
+        if(!receipt || !receipt.status) {
+            throw new DIDMethodFailureError('Error updating')
+        } else {
+            console.log(receipt);
+        }
+        return Promise.resolve(true);
+        
+    }  
 
     /**
      * Deactivates a DID on the Ethr DIDRegistry
