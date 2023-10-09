@@ -2,7 +2,7 @@
     "lcIssuerDid": {
         "did": "did:ethr:quorum:0x8ddC2eA43Ad7344d66F4420bBb10Ac415Ed8Ba16",
         "keyPair": {
-            "algorithm": "KEY_ALG.ES256K",
+            "algorithm": "ES256K",
             "publicKey": "03d4e3f7a6ba3adb956c82d80b7b85fe28065382e366e44ad9548af15b42e6cac9",
             "privateKey": "0x0cec0cc569b7a1d441f62738c08103c452e335e7b6118eab893f461bb80f56c5"
         }
@@ -10,9 +10,33 @@
     "applicantDid": {
         "did": "did:ethr:quorum:0xC8122F9eE4e37b06e2F37A658c5B9CDdD343DAC3",
         "keyPair": {
-            "algorithm": "KEY_ALG.ES256K",
+            "algorithm": "ES256K",
             "publicKey": "036fad518a738e73223141f334878a1f66a810b65c8e41b4261376b1c949c052f5",
             "privateKey": "0xab8fd521482ed8db9c9fa3dcde00a71afd3dfc5eaf38eb0a3425274868502298"
+        }
+    },
+    "advisingBankDid": {
+        "did": "did:ethr:quorum:0xC27a29831C4416318E5A5354b4452e303ef1b406",
+        "keyPair": {
+            "algorithm": "ES256K",
+            "publicKey": "03313335d3964a21a483d45cbea541bf1b7debd91245cd444b59f14f7354146fbe",
+            "privateKey": "0xcea0a00a73c2167898597e2546516d2311b9d25b25b7f7f09e145a09cfd63afd"
+        }
+    },
+    "beneficiaryDid": {
+        "did": "did:ethr:quorum:0x2D141Ad5846bF262EcE516074A14b13BA15A7a72",
+        "keyPair": {
+            "algorithm": "ES256K",
+            "publicKey": "03b287808432358f533d09508fc031365963e07ffbd1b75b8f28b6a5f9976192f7",
+            "privateKey": "0x3324325ecbe9ad5dfac53d43eb4a39d27dbeb13eeb3cbf5fcb8359b589a47369"
+        }
+    },
+    "confirmingBankDid": {
+        "did": "did:ethr:quorum:0xc8AeaEb3294D586f8B157cF4b30AE49723962A70",
+        "keyPair": {
+            "algorithm": "ES256K",
+            "publicKey": "028fbf60c83ca79299870653beb4aff47eb37c0af71a734e17a3b0140ed44935ca",
+            "privateKey": "0x571bd9e067f37f69fa39c02975ca44d47383c72a8ecc3cc19313e68e11749da5"
         }
     }
 }

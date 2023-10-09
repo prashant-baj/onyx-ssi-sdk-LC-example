@@ -27,6 +27,7 @@ import {
 // Initialize Ajv validator
 const ajv = new Ajv({ allErrors: true });
 const validate = ajv.compile(schema);
+var lcDID: DIDWithKeys;
 
 
 // Function to validate LC data
@@ -42,8 +43,31 @@ async function validateLCData() {
   }
 }
 
+/**
+ * Below operation is intended to add custome attributes to the LC DID for example confirming bank.
+ * Usefulness of this apprach is still to be proven as custom attributes are not yet retreived.
+ */
+function setConfirmingBank() {
+
+  //confirming bank setAttribute
+  const didEthr = new EthrDIDMethod(ethrProviders.lcIssuerEthrProvider);
+  const didResolver = getSupportedResolvers([didEthr]); 
+  
+  const confirmingBankDid: DIDWithKeys = dids.confirmingBankDid;
+  console.log("Setting custom attribute of Confirming Bank");
+  const tx = didEthr.setAttribute(lcDID, "ConfirmingBank", "asdf").then(res => {
+    console.log(res);
+    didResolver.resolve(lcDID.did, { accept: 'application/did+json' }).then(data => {
+      console.log("LC DID resolved !! ");
+      console.dir(data, { depth: null }); 
+    }).catch(err => {
+      console.error("LC DID could not be resolved");
+    });
+  });
+}
+
 // Function to generate JWT VC
-async function generateVC() {
+function generateVC() {
   const valid = validate(lcData);
 
   if (valid) {
@@ -54,18 +78,17 @@ async function generateVC() {
     const applicantDid: DIDWithKeys = dids.applicantDid;
     const lcIssuerDid: DIDWithKeys = dids.lcIssuerDid;
 
-    applicantDid.keyPair.algorithm = KEY_ALG.ES256K;
-    lcIssuerDid.keyPair.algorithm = KEY_ALG.ES256K;
-
 
     const didEthr = new EthrDIDMethod(ethrProviders.lcIssuerEthrProvider);
-    //const didKey = new KeyDIDMethod()
     const didResolver = getSupportedResolvers([didEthr]);
 
     didResolver.resolve(applicantDid.did, { accept: 'application/did+json' }).then(data => {
       console.log("Applicants DID resolved !! ");
 
+
       const lcDid = didEthr.create().then(res => {
+        lcDID = res;
+        console.dir(lcDID, { depth: null }); 
         const additionalParams = {
           id: res.did,
           expirationDate: "2024-01-01T19:23:24Z",
@@ -77,41 +100,39 @@ async function generateVC() {
           lcIssuerDid.did, applicantDid.did, subjectData, ["LetterOfCreditCredential"], additionalParams);
 
         //console.log("******************** Verifiable Credential of LC *********************");
-        //console.log(JSON.stringify(vc, null, 2))
+        console.dir(vc, { depth: null });
 
         const jwtService = new JWTService()
         const jwtVC = jwtService.signVC(lcIssuerDid, vc).then(jwt => {
           //console.log("******************** JWT Verifiable Credential of LC *********************");
           //console.log(jwt);
-          const filePath ='./src/LCService/config/jwt-credentials/'+additionalParams.id.replace(/:/g, '_');
-          const currentPath = process.cwd();          
+          const filePath = './src/LCService/config/jwt-credentials/' + additionalParams.id.replace(/:/g, '_');
+          const currentPath = process.cwd();
           fs.writeFileSync(filePath, jwt);
-          console.log("JWT VC saved to file -> ",filePath);
+          console.log("JWT VC saved to file -> ", filePath);
           console.log("Now you can present this VC to manufacturer and confirm your order !!");
+          setConfirmingBank();
         });
-        
+
       });
+
+
     }).catch(err => {
       console.error("Applicants DID could not be resolved");
     });
-
-    // const tx = didEthr.setAttribute(lcIssuerDid,"name","Prashant").then(res => {
-    //   console.log(res);      
-    // });
-
-    // const tx = didEthr.revokeAttribute(applicantDid,"name","Prashant").then(res => {
-    //   console.log(res);
-    // });
-
     
-
   } else {
     console.error('LC data is invalid. Please check the errors:');
     console.error(validate.errors);
   }
 
- 
-  
+
+
 }
 
+
+
+
 generateVC();
+
+

@@ -22,5 +22,11 @@
         "rpcUrl": "http://4.224.149.189/manufacturer",
         "tesseraUrl": "http://4.224.149.189/tessera-2",
         "registry": "0xfAA65222f6F64E0a018B86394aF66D70aDb7C1e3"
+    },
+    "confirmingBankEthrProvider": {
+        "name": "quorum",
+        "rpcUrl": "http://4.224.149.189/network-leader",
+        "tesseraUrl": "http://4.224.149.189/tessera-1",
+        "registry": "0xfAA65222f6F64E0a018B86394aF66D70aDb7C1e3"
     }
 }

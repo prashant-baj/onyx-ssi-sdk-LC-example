@@ -5,6 +5,7 @@ const schema = require('./schema/LC.json'); // Replace with the path to your sch
 const lcData = require('./config/data.json');
 const ethrProviders = require('./config/providers.json');
 const dids = require('./config/did.json');
+import { JwtPayload } from './config/config';
 import fs from "fs";
 import {
     EthrDIDMethod,
@@ -20,20 +21,24 @@ import {
     verifyPresentationJWT,
     DIDWithKeys,
     KeyPair,
-    KEY_ALG
+    KEY_ALG,
+    getCredentialsFromVP,
+    verifyDID,
+    DIDMethod
+
 } from "../";
 
-import { 
-    VerifiableCredential, 
-    VerifiablePresentation, 
-    verifyCredential, 
-    VerifyCredentialOptions, 
-    verifyPresentation, 
+import {
+    VerifiableCredential,
+    VerifiablePresentation,
+    verifyCredential,
+    VerifyCredentialOptions,
+    verifyPresentation,
     VerifyPresentationOptions,
     VerifiedPresentation,
     verifyPresentationPayloadOptions,
-    JwtPresentationPayload        
- } from "did-jwt-vc"
+    JwtPresentationPayload,
+} from "did-jwt-vc"
 import { Resolvable } from 'did-resolver';
 
 
@@ -47,17 +52,14 @@ export async function verifyLCPresentation() {
         });
         console.log(vpFilePath);
         const jwtVP = fs.readFileSync('./src/LCService/config/jwt-credentials/' + vpFilePath.vpFileName, 'utf-8');
-
-
         const applicantDid: DIDWithKeys = dids.applicantDid;
-        applicantDid.keyPair.algorithm = KEY_ALG.ES256K;
-        
-
         const didEthr = new EthrDIDMethod(ethrProviders.advisingBankEthrProvider);
         const didResolver = getSupportedResolvers([didEthr]);
 
-        const resultVp = await verifyLCPresentationLocal(jwtVP, didResolver)
-        console.log(resultVp)
+        decodeVP(jwtVP, didEthr);
+        
+        //const resultVp = await verifyPresentation(jwtVP, didResolver)
+        //console.log(resultVp)
 
     } catch (error) {
         console.log(error);
@@ -65,40 +67,48 @@ export async function verifyLCPresentation() {
 
 }
 
-export async function verifyLCPresentationJWT(
-    vp: VerifiablePresentation,
-    didResolver: Resolvable,
-    options?: VerifyPresentationOptions
-    // eslint-disable-next-line  @typescript-eslint/no-explicit-any
-): Promise<boolean> {
-    if (typeof vp === 'string') {
-        const verified = await verifyPresentation(vp, didResolver, options)
-        console.log(verified.payload.aud);
-        return verified.verified
+const decodeVP = async (signedVpJwt: string, didEthr: DIDMethod) => {
+
+    const didResolver = getSupportedResolvers([didEthr]);
+
+    try {
+        const vcJwt = getCredentialsFromVP(signedVpJwt)[0].toString();
+        const verificationCredentialPolicies = {
+            issuanceDate: true,
+            expirationDate: true,
+            format: true,
+        };
+        const isVcJwtValid = await verifyCredentialJWT(
+            vcJwt,
+            didResolver,
+            verificationCredentialPolicies
+        );
+
+        if (isVcJwtValid) {
+            const jwtService = new JWTService()
+            const vc = jwtService.decodeJWT(vcJwt)?.payload as JwtPayload;
+            console.log(vc);
+            try {
+                console.log("\nVerifying VC\n");
+
+                const isVcVerified = await verifyDID(vc.jti!, didResolver);
+                console.log(`\nVerification status: ${isVcVerified}\n`);
+            } catch (error) {
+                console.log(error);
+            }
+        } else {
+            console.log("Invalid VC JWT");
+        }
+
+    } catch (err) {
+
+        console.log(
+            "\nTo run this script you must have a valid VP and a valid signed VP JWT\n"
+        );
+
     }
-    throw TypeError('Ony JWT supported for Verifiable Presentations')
 
-}
+};
 
-export async function verifyLCPresentationLocal(
-    presentation: JWT,
-    resolver: Resolvable,
-    options: VerifyPresentationOptions = {}
-  ): Promise<VerifiedPresentation> {
-    const nbf = options?.policies?.issuanceDate === false ? false : undefined
-    const exp = options?.policies?.expirationDate === false ? false : undefined
-    options = { audience: options.domain, ...options, policies: { ...options?.policies, nbf, exp, iat: nbf } }
-    const verified: Partial<VerifiedPresentation> = await verifyJWT(presentation, {
-      resolver,
-      ...options,
-    })
-    verifyPresentationPayloadOptions(verified.payload as JwtPresentationPayload, options)
-    // verified.verifiablePresentation = normalizePresentation(verified.jwt as string, options?.removeOriginalFields)
-    // if (options?.policies?.format !== false) {
-    //   validatePresentationPayload(verified.verifiablePresentation)
-    // }
-    return verified as VerifiedPresentation
-  }
-  
 
 verifyLCPresentation();

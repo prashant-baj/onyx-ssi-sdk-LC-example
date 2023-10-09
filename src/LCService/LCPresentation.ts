@@ -38,8 +38,7 @@ async function generatePresentation() {
 
         // //Create Presentation from VC JWT
         const applicantDid: DIDWithKeys = dids.applicantDid;
-        applicantDid.keyPair.algorithm = KEY_ALG.ES256K;
-
+        
         const didEthr = new EthrDIDMethod(ethrProviders.applicantEthrProvider);
         const didResolver = getSupportedResolvers([didEthr, didEthr]);
         didResolver.resolve(applicantDid.did, { accept: 'application/did+json' }).then(data => {

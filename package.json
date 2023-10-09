@@ -38,7 +38,8 @@
     "test": "jest --no-cache --verbose --coverage",
     "generateLC": "ts-node ./src/LCService/LCIssuance.ts",
     "generatePresentation": "ts-node ./src/LCService/LCPresentation.ts",
-    "verifyVP": "ts-node ./src/LCService/LCVerification.ts"
+    "verifyVP": "ts-node ./src/LCService/LCVerification.ts",
+    "addDelegate": "ts-node ./src/LCService/Delegation.ts"
   },
   "keywords": [],
   "author": "",
