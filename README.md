@@ -4,7 +4,7 @@
 * Additionally there are scripts to compile and deploy DIDRegistry Contract under Dapp
 * Use case code can be found under src/LCService
 * [Presentation for use case](https://github.com/prashant-baj/onyx-ssi-sdk-LC-example/blob/main/Verifiable%20Credentials%20for%20Trade%20Finance.pptx)
-* [Demo video](https://drive.google.com/file/d/1iKz85rVHJDSaQVwh-jjifXBrxNg0rgrp/view?usp=sharing)
+* [Demo video](https://drive.google.com/file/d/1pc0B1SBG4JdhM95kzIAuSLgZMz6AO-cm/view?usp=sharing)
 
 #### Based on Onyx SSI SDK (Forked from [Onyx SSI SDK](https://github.com/jpmorganchase/onyx-ssi-sdk)
 
