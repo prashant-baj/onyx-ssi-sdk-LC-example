@@ -1,0 +1,14 @@
+{
+    "name": "new",
+    "version": "1.0.0",
+    "description": "",
+    "keywords": [],
+    "dependencies": {
+        "fs": "",
+        "request": "^2.88.2",
+        "underscore": "^1.13.6",
+        "web3": "^1.10.2",
+        "web3js-quorum": "^22.4.0",
+        "ws": "^8.11.0"
+    }
+}

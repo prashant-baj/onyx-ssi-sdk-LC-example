@@ -1,0 +1,176 @@
+---
+# ingress-nginx IngressClass
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: network-nginx
+  namespace: quorum
+spec:
+  controller: k8s.io/network-ingress-nginx
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: network-nginx-configuration
+  namespace: quorum
+  labels:
+    app.kubernetes.io/name: network-nginx
+    app.kubernetes.io/part-of: network-nginx
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: besu-ingress-routes
+  namespace: quorum
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |-
+      rewrite (?i)/tessera-[0-9]?/(.*) /$1 break;
+      rewrite (?i)/tessera-[0-9]?$ / break;    
+      rewrite (?i)/kibana/(.*) /$1 break;
+      rewrite (?i)/kibana$ / break;
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "10000"
+    #nginx.ingress.kubernetes.io/whitelist-source-range: w.x.y.z/32,a.b.c.d/32
+
+spec:
+  ingressClassName: network-nginx
+  rules:
+  - http:
+      paths:
+      - path: /validator-1
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-validator-1
+            port:
+              number: 8545
+      - path: /validator-2
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-validator-2
+            port:
+              number: 8545
+      - path: /validator-3
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-validator-3
+            port:
+              number: 8545
+      - path: /validator-4
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-validator-4
+            port:
+              number: 8545
+      - path: /network-leader
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-network-leader
+            port:
+              number: 8545
+      - path: /network-leader-ws
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-network-leader
+            port:
+              number: 8546      
+      - path: /tessera-1
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-network-leader
+            port:
+              number: 9080
+      - path: /manufacturer-ws
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-manufacturer
+            port:
+              number: 8546
+      - path: /manufacturer
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-manufacturer
+            port:
+              number: 8545
+      - path: /tessera-2
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-manufacturer
+            port:
+              number: 9080
+      - path: /upi-issuer
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-upi-issuer
+            port:
+              number: 8545
+      - path: /upi-issuer-ws
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-upi-issuer
+            port:
+              number: 8546
+      - path: /tessera-3
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-upi-issuer
+            port:
+              number: 9080
+      - path: /merchant
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-merchant
+            port:
+              number: 8545
+      - path: /merchant-ws
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-merchant
+            port:
+              number: 8546
+      - path: /tessera-4
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-merchant
+            port:
+              number: 9080
+      - path: /acquirer
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-acquirer
+            port:
+              number: 8545
+      - path: /acquirer-ws
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-acquirer
+            port:
+              number: 8546
+      - path: /tessera-5
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-acquirer
+            port:
+              number: 9080
+

@@ -51,7 +51,7 @@ async function generatePresentation() {
 
                 fs.writeFileSync(filePath, data);
                 console.log("JWT VP saved to file -> ", filePath);
-                console.log("Now you can send this VP to Merchant and Advising bank for verification !!");
+                console.log("Now you can send this VP to Exporter (Manufacturer) and Advising bank for verification !!");
             });
 
 

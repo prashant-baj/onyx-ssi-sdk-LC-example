@@ -1,0 +1,52 @@
+---
+
+quorumFlags:
+  removeGenesisOnDelete: true
+
+cluster:
+  provider: azure  # choose from: local | aws | azure
+  cloudNativeServices: true # set to true to use Cloud Native Services (SecretsManager and IAM for AWS; KeyVault & Managed Identities for Azure)
+
+aws:
+  # the aws cli commands uses the name 'quorum-node-secrets-sa' so only change this if you altered the name
+  serviceAccountName: quorum-node-secrets-sa
+  # the region you are deploying to
+  region: ap-southeast-2
+
+azure:
+  # the script/bootstrap.sh uses the name 'quorum-pod-identity' so only change this if you altered the name
+  identityName: quorum-pod-identity
+  # the clientId of the user assigned managed identity created in the template
+  identityClientId: efae6f7e-a346-4b2b-88e1-b81adb221320  
+  keyvaultName: besu-dev-zaiodecs-vault
+  # the tenant ID of the key vault
+  tenantId: f9e879fc-5f3d-4ff3-8db7-262ef73edab4
+  # the subscription ID to use - this needs to be set explictly when using multi tenancy
+  subscriptionId: ccf62437-546d-4fdc-8f8e-8c1cbf1a4d2b
+
+
+# the raw Genesis config
+# rawGenesisConfig.blockchain.nodes set the number of validators/signers
+rawGenesisConfig:
+  genesis:
+    config:
+      chainId: 1337
+      algorithm:
+        consensus: qbft
+        blockperiodseconds: 10
+        epochlength: 30000
+        requesttimeoutseconds: 20
+    gasLimit: '0xf7b760' 
+    difficulty: '0x1'
+    coinbase: '0x0000000000000000000000000000000000000000'
+  blockchain:
+    nodes:
+      generate: true
+      count: 4
+    accountPassword: 'password'
+
+
+image:
+  repository: consensys/quorum-k8s-hooks
+  tag: qgt-0.2.3
+  pullPolicy: IfNotPresent

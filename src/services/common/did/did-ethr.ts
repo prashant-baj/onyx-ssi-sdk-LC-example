@@ -206,7 +206,7 @@ export class EthrDIDMethod implements DIDMethod {
         const provider = new PrivateJsonRpcProvider(this.providerConfigs.rpcUrl, 1337, 'http://4.224.149.189/tessera-2');
         const wallet = new PrivateWallet(did.keyPair.privateKey as string, provider);
         const address = await wallet.connect(provider).getAddress()
-        const contractAddress = '0x8EC1fA0D9921d09626f52A809f0b66fFA5db39D4';//this.providerConfigs.registry
+        const contractAddress = this.providerConfigs.registry
         const registry = new Contract(contractAddress, EthereumDIDRegistry.abi, wallet)
         console.log("*********", address);
         const tx = await registry.setAttribute(

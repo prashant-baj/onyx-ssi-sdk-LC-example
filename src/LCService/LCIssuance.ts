@@ -111,7 +111,7 @@ function generateVC() {
           fs.writeFileSync(filePath, jwt);
           console.log("JWT VC saved to file -> ", filePath);
           console.log("Now you can present this VC to manufacturer and confirm your order !!");
-          setConfirmingBank();
+          //setConfirmingBank();
         });
 
       });

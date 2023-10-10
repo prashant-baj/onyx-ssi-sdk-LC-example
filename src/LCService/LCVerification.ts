@@ -48,7 +48,7 @@ export async function verifyLCPresentation() {
         const vpFilePath = await inquirer.prompt({
             type: 'input',
             name: 'vpFileName',
-            message: 'Enter JWT VC File name:'
+            message: 'Enter JWT VP File name:'
         });
         console.log(vpFilePath);
         const jwtVP = fs.readFileSync('./src/LCService/config/jwt-credentials/' + vpFilePath.vpFileName, 'utf-8');

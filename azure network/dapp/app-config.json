@@ -1,0 +1,53 @@
+{
+    "ownerAddress": "0xfe3b557e8fb62b89f4916b721be55ceb828dbd73",
+    "privateKey": "0xf0cddef9c8970627b671ff0c7faa19db73846afb200176bff735650703ca2355",
+    "tesseraPubKey": "3febRQjz+NyDVEJ3BdQMpLEzNHPulSLlrwmhdQUwvQ4=",    
+    "nodeAddress": "4.224.149.189",
+    "deployedRegistryContractsPath": "../deployedRegistryContracts.json",    
+    "registryContractABIPath": "../build/contracts/TradeConnectDIDRegistry.json",    
+    "peers": [
+        {
+            "name":"network-leader",
+            "businessName":"National Banks Consortium",
+            "accountAddress":"0xfe3b557e8fb62b89f4916b721be55ceb828dbd73",
+            "privateKey":"8f2a55949038a9610f50fb23b5883af3b4ecb3c3bb792cbcefbd1542c692be63",
+            "tesseraPubKey":"3febRQjz+NyDVEJ3BdQMpLEzNHPulSLlrwmhdQUwvQ4="
+        },
+        {
+            "name":"vc-registrar",
+            "businessName":"Verify Inc",
+            "accountAddress":"0x6db8024ad0c50b5c4a7fe229926de8626b16db9c",
+            "privateKey":"f0cddef9c8970627b671ff0c7faa19db73846afb200176bff735650703ca2355",
+            "tesseraPubKey":"MsHs6ddxzydY2ADrinYzaB51PiyJoIesXkwae8hb+Ck="
+        },
+        {
+            "name":"exporter",
+            "businessName":"Tee Exports",
+            "accountAddress":"0xe2a8f9dbd1222fe51682aef3f1c042a398797126",
+            "privateKey":"0xea98c1c7373a6ed8f535053da4ec0f54d0c26bee66015b5823565137af95539a",
+            "tesseraPubKey":"PPKAgqYjxZFsXvmxw3xYLVHbvmF7Au7bHctYqFum20E="
+        },
+        {
+            "name":"lc-issuer",
+            "businessName":"Global Trade Finance Bank",
+            "accountAddress":"0xafaf24db6f379b6226e9369ad7487e9d4591b219",
+            "privateKey":"0x71539a9e72f7c2726244bf490319bd7d6f5b4245f2be62cc39cc7fe2f83b6d15",
+            "tesseraPubKey":"rS4IPvDSreS8EwXknxXEhek2yNwgdZpkBU+JNzUbjHo="
+        },
+        {
+            "name":"importer",
+            "businessName":"Bee Imports",
+            "accountAddress":"0xaebde3ed64ea2f820e332cd6c6aab10510de72f3",
+            "privateKey":"0xec0605e8f878761c6d5966ea73d31a0355a86f990a1322071f281e310fbaa098",
+            "tesseraPubKey":"kXi8JBbIrqAKCeEx8LmbGVxCoUjdOgXlFfVbJBbEpHI="
+        }
+        ,
+        {
+            "name":"lc-advisor",
+            "businessName":"Foreign Trade Bank",
+            "accountAddress":"0xdf6a86a762fb54f319d92b16810a2255b652c059",
+            "privateKey":"0x4de854c271ab3ae70f336dc4cbd99c565c6b6a30948230d26cded7ca156d5d8d",
+            "tesseraPubKey":"BaI5hSlw+TkMkCSSeB3w44gTPTl/LkoMu3C2CPImRBU="
+        }
+    ]
+}

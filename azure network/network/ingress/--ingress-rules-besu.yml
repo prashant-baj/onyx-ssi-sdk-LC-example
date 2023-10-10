@@ -1,0 +1,124 @@
+---
+# ingress-nginx IngressClass
+apiVersion: networking.k8s.io/v1
+kind: IngressClass
+metadata:
+  name: network-nginx
+  namespace: quorum
+spec:
+  controller: k8s.io/network-ingress-nginx
+
+---
+kind: ConfigMap
+apiVersion: v1
+metadata:
+  name: network-nginx-configuration
+  namespace: quorum
+  labels:
+    app.kubernetes.io/name: network-nginx
+    app.kubernetes.io/part-of: network-nginx
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: besu-ingress-routes
+  namespace: quorum
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "false"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/configuration-snippet: |
+      rewrite (?i)/tessera-[0-9]?/(.*) /$1 break;
+      rewrite (?i)/tessera-[0-9]?$ / break;    
+      rewrite (?i)/kibana/(.*) /$1 break;
+      rewrite (?i)/kibana$ / break;
+    nginx.ingress.kubernetes.io/rewrite-target: /
+
+spec:
+  ingressClassName: network-nginx
+  rules:
+  - http:
+      paths:
+      - path: /validator-1
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-validator-1
+            port:
+              number: 8545
+      - path: /validator-2
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-validator-2
+            port:
+              number: 8545
+      - path: /validator-3
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-validator-3
+            port:
+              number: 8545
+      - path: /validator-4
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-validator-4
+            port:
+              number: 8545
+      - path: /vc-registrar
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-vc-registrar
+            port:
+              number: 8545
+      - path: /network-leader
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-network-leader
+            port:
+              number: 8546      
+      - path: /exporter
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-exporter
+            port:
+              number: 8546
+      - path: /importer
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-importer
+            port:
+              number: 8545
+      - path: /lc-issuing-bank
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-lc-issuing-bank
+            port:
+              number: 8545
+      - path: /lc-advising-bank
+        pathType: Prefix
+        backend:
+          service:
+            name: besu-node-lc-advising-bank
+            port:
+              number: 8546
+      - path: /kibana
+        pathType: Prefix
+        backend:
+          service:
+            name: kibana-kibana
+            port:
+              number: 5601
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: monitoring-grafana
+            port:
+              number: 3000
